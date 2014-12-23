@@ -1,34 +1,15 @@
-package net.xkor.ahlib.helpers;
+package net.xkor.ahlib.helper;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
 
-import net.xkor.ahlib.annotations.SaveToState;
+import net.xkor.ahlib.annotation.SaveToState;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
-public class StateRestoreFragmentHelper extends FragmentHelper {
+public class StateRestoreHelper {
     private static final String PREFIX = "AHState_";
-
-    public StateRestoreFragmentHelper(Fragment fragment) {
-        super(fragment);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            restoreMarkedObjectFields(getFragment(), savedInstanceState);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        saveMarkedObjectFields(getFragment(), outState);
-    }
 
     public static void saveMarkedObjectFields(Object object, Bundle state) {
         for (Field field : object.getClass().getDeclaredFields()) {
