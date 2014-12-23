@@ -12,13 +12,13 @@ public class BaseAHFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        helper.onCreate(savedInstanceState);
+        getHelper().onCreate(savedInstanceState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        helper.onSaveInstanceState(outState);
+        getHelper().onSaveInstanceState(outState);
     }
 
     protected BaseFragmentHelper getHelper() {

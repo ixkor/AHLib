@@ -12,13 +12,13 @@ public class BaseAHActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        helper.onCreate(savedInstanceState);
+        getHelper().onCreate(savedInstanceState);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        helper.onSaveInstanceState(outState);
+        getHelper().onSaveInstanceState(outState);
     }
 
     protected BaseActivityHelper getHelper() {
