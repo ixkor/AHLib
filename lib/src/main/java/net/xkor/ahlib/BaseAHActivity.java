@@ -5,7 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 
 import net.xkor.ahlib.helper.BaseActivityHelper;
 
-public class BaseAHActivity extends ActionBarActivity {
+public abstract class BaseAHActivity extends ActionBarActivity {
 
     private BaseActivityHelper helper;
 

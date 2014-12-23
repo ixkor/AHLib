@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import net.xkor.ahlib.BaseAHActivity;
 import net.xkor.ahlib.BaseAHFragment;
+import net.xkor.ahlib.annotation.ContainerLayout;
+import net.xkor.ahlib.annotation.Layout;
 import net.xkor.ahlib.annotation.SaveToState;
 
 
@@ -25,15 +27,12 @@ public class MainActivity extends BaseAHActivity {
         }
     }
 
+    @ContainerLayout(value = R.layout.activity_main, contentFrameId = R.id.container)
+    @Layout(R.layout.fragment_main)
     public static class PlaceholderFragment extends BaseAHFragment {
 
         @SaveToState
         private int counter;
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_main, container, false);
-        }
 
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
