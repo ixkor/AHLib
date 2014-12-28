@@ -30,6 +30,18 @@ public abstract class BaseAHFragment extends Fragment {
         return getHelper().onCreateView(inflater, container);
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getHelper().onViewCreated(view);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getHelper().onDestroyView();
+    }
+
     protected BaseFragmentHelper getHelper() {
         if (helper == null) {
             helper = createFragmentHelper();

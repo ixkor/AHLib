@@ -1,6 +1,7 @@
 package net.xkor.ahlib.helper;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 
 import net.xkor.ahlib.annotation.ContainerLayout;
 import net.xkor.ahlib.annotation.Layout;
+import net.xkor.ahlib.binding.BindingHelper;
 
 public class BaseFragmentHelper {
 
@@ -47,5 +49,13 @@ public class BaseFragmentHelper {
         }
 
         return view;
+    }
+
+    public void onViewCreated(View view) {
+        BindingHelper.findViewsForFields(view, fragment);
+    }
+
+    public void onDestroyView() {
+        BindingHelper.clearViewsForFields(fragment);
     }
 }

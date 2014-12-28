@@ -76,4 +76,30 @@ public class BindingHelper {
     public <T extends View> void removeViewDataSetter(Class<T> viewClass) {
         viewDataSetters.remove(viewClass);
     }
+
+    public static void findViewsForFields(View rootView, Object object) {
+        for (Field field : object.getClass().getDeclaredFields()) {
+            FindViewById viewById = field.getAnnotation(FindViewById.class);
+            if (viewById != null) {
+                field.setAccessible(true);
+                try {
+                    field.set(object, rootView.findViewById(viewById.value()));
+                } catch (IllegalAccessException ignored) {
+                }
+            }
+        }
+    }
+
+    public static void clearViewsForFields(Object object) {
+        for (Field field : object.getClass().getDeclaredFields()) {
+            FindViewById viewById = field.getAnnotation(FindViewById.class);
+            if (viewById != null) {
+                field.setAccessible(true);
+                try {
+                    field.set(object, null);
+                } catch (IllegalAccessException ignored) {
+                }
+            }
+        }
+    }
 }
