@@ -7,11 +7,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BindingHelper {
 
-    private TreeMap<Class<?>, ViewDataSetter> viewDataSetters = new TreeMap<>();
+    private Map<Class<?>, ViewDataSetter> viewDataSetters = new HashMap<>();
 
     private static BindingHelper defaultInstance = new BindingHelper();
 

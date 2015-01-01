@@ -1,4 +1,4 @@
-package net.xkor.ahlib.annotation;
+package net.xkor.ahlib.restoring;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

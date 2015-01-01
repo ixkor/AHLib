@@ -1,4 +1,4 @@
-package net.xkor.ahlib.annotation;
+package net.xkor.ahlib.layouting;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited()
-public @interface Layout {
+public @interface ContainerLayout {
     int value();
+    int contentFrameId() default android.R.id.content;
 }

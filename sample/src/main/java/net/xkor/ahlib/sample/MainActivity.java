@@ -7,18 +7,18 @@ import android.widget.TextView;
 
 import net.xkor.ahlib.BaseAHActivity;
 import net.xkor.ahlib.BaseAHFragment;
-import net.xkor.ahlib.annotation.ContainerLayout;
-import net.xkor.ahlib.annotation.Layout;
-import net.xkor.ahlib.annotation.SaveToState;
+import net.xkor.ahlib.layouting.ContainerLayout;
+import net.xkor.ahlib.layouting.Layout;
+import net.xkor.ahlib.restoring.SaveToState;
 import net.xkor.ahlib.binding.FindViewById;
 
 
+@Layout(R.layout.activity_main)
 public class MainActivity extends BaseAHActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
@@ -26,7 +26,6 @@ public class MainActivity extends BaseAHActivity {
         }
     }
 
-    @ContainerLayout(value = R.layout.activity_main, contentFrameId = R.id.container)
     @Layout(R.layout.fragment_main)
     public static class PlaceholderFragment extends BaseAHFragment {
 

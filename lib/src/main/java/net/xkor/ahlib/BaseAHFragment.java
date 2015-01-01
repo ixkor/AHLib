@@ -7,11 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import net.xkor.ahlib.helper.BaseFragmentHelper;
-
 public abstract class BaseAHFragment extends Fragment {
 
-    private BaseFragmentHelper helper;
+    private BaseUiObjectHelper helper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,14 +40,14 @@ public abstract class BaseAHFragment extends Fragment {
         getHelper().onDestroyView();
     }
 
-    protected BaseFragmentHelper getHelper() {
+    protected BaseUiObjectHelper getHelper() {
         if (helper == null) {
-            helper = createFragmentHelper();
+            helper = createHelper();
         }
         return helper;
     }
 
-    protected BaseFragmentHelper createFragmentHelper() {
-        return new BaseFragmentHelper(this);
+    protected BaseUiObjectHelper createHelper() {
+        return new BaseUiObjectHelper(this);
     }
 }

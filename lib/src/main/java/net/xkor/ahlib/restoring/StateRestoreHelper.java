@@ -1,9 +1,9 @@
-package net.xkor.ahlib.helper;
+package net.xkor.ahlib.restoring;
 
 import android.os.Bundle;
 import android.os.Parcelable;
 
-import net.xkor.ahlib.annotation.SaveToState;
+import net.xkor.ahlib.restoring.SaveToState;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
