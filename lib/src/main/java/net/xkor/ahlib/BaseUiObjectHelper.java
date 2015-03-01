@@ -19,12 +19,12 @@ public class BaseUiObjectHelper {
 
     public void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            StateRestoreHelper.restoreMarkedObjectFields(uiObject, savedInstanceState);
+            StateRestoreHelper.restoreMarkedObjectFields(uiObject, savedInstanceState, null);
         }
     }
 
     public void onSaveInstanceState(Bundle outState) {
-        StateRestoreHelper.saveMarkedObjectFields(uiObject, outState);
+        StateRestoreHelper.saveMarkedObjectFields(uiObject, outState, null);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container) {
@@ -32,10 +32,10 @@ public class BaseUiObjectHelper {
     }
 
     public void onViewCreated(View view) {
-        BindingHelper.findViewsForFields(view, uiObject);
+        BindingHelper.findViewsForFields(view, uiObject, null);
     }
 
     public void onDestroyView() {
-        BindingHelper.clearViewsForFields(uiObject);
+        BindingHelper.clearViewsForFields(uiObject, null);
     }
 }

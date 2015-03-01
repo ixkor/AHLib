@@ -3,6 +3,8 @@ package net.xkor.ahlib.binding;
 import android.view.View;
 import android.widget.TextView;
 
+import net.xkor.ahlib.Utils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -78,29 +80,29 @@ public class BindingHelper {
         viewDataSetters.remove(viewClass);
     }
 
-    public static void findViewsForFields(View rootView, Object object) {
-        for (Field field : object.getClass().getDeclaredFields()) {
-            FindViewById viewById = field.getAnnotation(FindViewById.class);
-            if (viewById != null) {
+    /**
+     * Set value for object fields with {@link FindViewById} annotation.
+     */
+    public static void findViewsForFields(View rootView, Object object, Class<?> baseClass) {
+        try {
+            for (Field field : Utils.getFieldsWithAnnotation(object, FindViewById.class, baseClass)) {
                 field.setAccessible(true);
-                try {
-                    field.set(object, rootView.findViewById(viewById.value()));
-                } catch (IllegalAccessException ignored) {
-                }
+                field.set(object, rootView.findViewById(field.getAnnotation(FindViewById.class).value()));
             }
+        } catch (IllegalAccessException ignored) {
         }
     }
 
-    public static void clearViewsForFields(Object object) {
-        for (Field field : object.getClass().getDeclaredFields()) {
-            FindViewById viewById = field.getAnnotation(FindViewById.class);
-            if (viewById != null) {
+    /**
+     * Clear value for object fields with {@link FindViewById} annotation.
+     */
+    public static void clearViewsForFields(Object object, Class<?> baseClass) {
+        try {
+            for (Field field : Utils.getFieldsWithAnnotation(object, FindViewById.class, baseClass)) {
                 field.setAccessible(true);
-                try {
-                    field.set(object, null);
-                } catch (IllegalAccessException ignored) {
-                }
+                field.set(object, null);
             }
+        } catch (IllegalAccessException ignored) {
         }
     }
 }

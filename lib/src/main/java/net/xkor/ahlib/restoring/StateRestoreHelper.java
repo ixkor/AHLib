@@ -1,87 +1,97 @@
 package net.xkor.ahlib.restoring;
 
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v4.util.ArrayMap;
 
+import net.xkor.ahlib.Utils;
 import net.xkor.ahlib.restoring.SaveToState;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
 public class StateRestoreHelper {
-    private static final String PREFIX = "AHState_";
+    private static final String OBJECT_STATE_KEY = "OBJECT_STATE_KEY";
 
-    public static void saveMarkedObjectFields(Object object, Bundle state) {
-        for (Field field : object.getClass().getDeclaredFields()) {
-            if (field.isAnnotationPresent(SaveToState.class)) {
+    /**
+     * Save object fields with {@link SaveToState} annotation in bundle state.
+     */
+    public static void saveMarkedObjectFields(Object object, Bundle state, Class<?> baseClass) {
+        ObjectState objectState = new ObjectState();
+        try {
+            for (Field field : Utils.getFieldsWithAnnotation(object, SaveToState.class, baseClass)) {
                 field.setAccessible(true);
-                String stateName = PREFIX + field.getName();
-                try {
-                    if (field.getType().isAssignableFrom(String.class)) {
-                        state.putString(stateName, (String) field.get(object));
-                    } else if (field.getType().isAssignableFrom(Boolean.TYPE)) {
-                        state.putBoolean(stateName, field.getBoolean(object));
-                    } else if (field.getType().isAssignableFrom(Integer.TYPE)) {
-                        state.putInt(stateName, field.getInt(object));
-                    } else if (field.getType().isAssignableFrom(Float.TYPE)) {
-                        state.putFloat(stateName, field.getFloat(object));
-                    } else if (field.getType().isAssignableFrom(Long.TYPE)) {
-                        state.putLong(stateName, field.getLong(object));
-                    } else if (field.getType().isAssignableFrom(Byte.TYPE)) {
-                        state.putByte(stateName, field.getByte(object));
-                    } else if (field.getType().isAssignableFrom(Character.TYPE)) {
-                        state.putChar(stateName, field.getChar(object));
-                    } else if (field.getType().isAssignableFrom(Short.TYPE)) {
-                        state.putShort(stateName, field.getShort(object));
-                    } else if (field.getType().isAssignableFrom(Double.TYPE)) {
-                        state.putDouble(stateName, field.getDouble(object));
-                    } else if (field.getType().isAssignableFrom(Bundle.class)) {
-                        state.putBundle(stateName, (Bundle) field.get(object));
-                    } else if (field.getType().isAssignableFrom(Serializable.class)) {
-                        state.putSerializable(stateName, (Serializable) field.get(object));
-                    } else if (field.getType().isAssignableFrom(Parcelable.class)) {
-                        state.putParcelable(stateName, (Parcelable) field.get(object));
-                    }
-                } catch (IllegalAccessException ignored) {
-                }
+                objectState.put(field.getName(), field.get(object));
             }
+        } catch (IllegalAccessException ignored) {
+        }
+        if (!objectState.isEmpty()) {
+            state.putParcelable(OBJECT_STATE_KEY, objectState);
         }
     }
 
-    public static void restoreMarkedObjectFields(Object object, Bundle state) {
-        for (Field field : object.getClass().getDeclaredFields()) {
-            if (field.isAnnotationPresent(SaveToState.class)) {
+    /**
+     * Restore object fields with {@link SaveToState} annotation from bundle state.
+     */
+    public static void restoreMarkedObjectFields(Object object, Bundle state, Class<?> baseClass) {
+        ObjectState objectState = state.getParcelable(OBJECT_STATE_KEY);
+        if (objectState == null || objectState.isEmpty())
+            return;
+
+        try {
+            for (Field field : Utils.getFieldsWithAnnotation(object, SaveToState.class, baseClass)) {
                 field.setAccessible(true);
-                String stateName = PREFIX + field.getName();
-                try {
-                    if (field.getType().isAssignableFrom(String.class)) {
-                        field.set(object, state.getString(stateName));
-                    } else if (field.getType().isAssignableFrom(Boolean.TYPE)) {
-                        field.setBoolean(object, state.getBoolean(stateName));
-                    } else if (field.getType().isAssignableFrom(Integer.TYPE)) {
-                        field.setInt(object, state.getInt(stateName));
-                    } else if (field.getType().isAssignableFrom(Float.TYPE)) {
-                        field.setFloat(object, state.getFloat(stateName));
-                    } else if (field.getType().isAssignableFrom(Long.TYPE)) {
-                        field.setLong(object, state.getLong(stateName));
-                    } else if (field.getType().isAssignableFrom(Byte.TYPE)) {
-                        field.setByte(object, state.getByte(stateName));
-                    } else if (field.getType().isAssignableFrom(Character.TYPE)) {
-                        field.setChar(object, state.getChar(stateName));
-                    } else if (field.getType().isAssignableFrom(Short.TYPE)) {
-                        field.setShort(object, state.getShort(stateName));
-                    } else if (field.getType().isAssignableFrom(Double.TYPE)) {
-                        field.setDouble(object, state.getDouble(stateName));
-                    } else if (field.getType().isAssignableFrom(Bundle.class)) {
-                        field.set(object, state.getBundle(stateName));
-                    } else if (field.getType().isAssignableFrom(Serializable.class)) {
-                        field.set(object, state.getSerializable(stateName));
-                    } else if (field.getType().isAssignableFrom(Parcelable.class)) {
-                        field.set(object, state.getParcelable(stateName));
-                    }
-                } catch (IllegalAccessException ignored) {
-                }
+                field.set(object, objectState.get(field.getName()));
             }
+        } catch (IllegalAccessException ignored) {
         }
+    }
+
+    private static class ObjectState implements Parcelable {
+
+        private ArrayMap<String, Object> map = new ArrayMap<>();
+
+        public ObjectState(Parcel source) {
+            source.readMap(map, null);
+        }
+
+        public ObjectState() {
+        }
+
+        public void put(String key, Object value) {
+            map.put(key, value);
+        }
+
+        public Object get(String key) {
+            return map.get(key);
+        }
+
+        public boolean isEmpty() {
+            return map.isEmpty();
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeMap(map);
+        }
+
+        public static final Creator<ObjectState> CREATOR =
+                new Creator<ObjectState>() {
+                    @Override
+                    public ObjectState createFromParcel(Parcel source) {
+                        return new ObjectState(source);
+                    }
+
+                    @Override
+                    public ObjectState[] newArray(int size) {
+                        return new ObjectState[size];
+                    }
+                };
     }
 }

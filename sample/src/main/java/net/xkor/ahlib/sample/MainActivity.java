@@ -7,10 +7,9 @@ import android.widget.TextView;
 
 import net.xkor.ahlib.BaseAHActivity;
 import net.xkor.ahlib.BaseAHFragment;
-import net.xkor.ahlib.layouting.ContainerLayout;
+import net.xkor.ahlib.binding.FindViewById;
 import net.xkor.ahlib.layouting.Layout;
 import net.xkor.ahlib.restoring.SaveToState;
-import net.xkor.ahlib.binding.FindViewById;
 
 
 @Layout(R.layout.activity_main)
@@ -47,6 +46,7 @@ public class MainActivity extends BaseAHActivity {
                 }
             });
 
+            counterView.setSaveEnabled(false);
             counterView.setText("" + counter);
         }
     }
